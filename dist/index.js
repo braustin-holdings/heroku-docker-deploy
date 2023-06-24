@@ -2729,13 +2729,18 @@ const login_1 = __importDefault(__nccwpck_require__(842));
 const herokuAction = (0, scripts_1.herokuActionSetup)((0, core_1.getInput)('app_name'));
 (0, login_1.default)()
     .then(() => __awaiter(void 0, void 0, void 0, function* () {
+    const { stdout } = yield (0, util_1.promisify)(child_process_1.exec)(herokuAction('tag'));
+    (0, core_1.info)('Your Docker image was tagged at the Heroku Container Registry. 🏗');
+    (0, core_1.info)(`stdout: ${stdout}`);
+}))
+    .then(() => __awaiter(void 0, void 0, void 0, function* () {
     const { stdout } = yield (0, util_1.promisify)(child_process_1.exec)(herokuAction('push'));
-    (0, core_1.info)('Your Docker image was built and pushed to Heroku Container Registry. 🏗');
+    (0, core_1.info)('Your Docker image was pushed to Heroku Container Registry. 🏗');
     (0, core_1.info)(`stdout: ${stdout}`);
 }))
     .then(() => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, util_1.promisify)(child_process_1.exec)(herokuAction('release'));
-    (0, core_1.info)('Your Appliction was deployed successfully. 🚀');
+    (0, core_1.info)('Your Application was deployed successfully. 🚀');
 }))
     .catch(error => {
     (0, core_1.setFailed)(`Something went wrong building your image. [Error]: ${error.message}`);
@@ -2793,15 +2798,15 @@ exports.authenticationScript = authenticationScript;
 const herokuActionSetup = (appName) => {
     return (action) => {
         const HEROKU_API_KEY = (0, core_1.getInput)('api_key');
-        const contextPath = (0, core_1.getInput)('dockerfile_path');
+        const dockerImage = (0, core_1.getInput)('docker_image');
         const processType = (0, core_1.getInput)('process_type');
-        return action === 'push'
-            ? `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} \
-	      ${processType} \
-          --recursive \
-          --context-path ${contextPath} \
-          --app ${appName}`
-            : `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} ${processType} --app ${appName}`;
+        if (action === "tag") {
+            return `docker tag ${dockerImage} registry.heroku.com/${appName}/${processType}`;
+        }
+        else if (action === "push") {
+            return `docker push registry.heroku.com/${appName}/${processType}`;
+        }
+        return `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} ${processType} --app ${appName}`;
     };
 };
 exports.herokuActionSetup = herokuActionSetup;

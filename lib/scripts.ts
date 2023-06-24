@@ -1,22 +1,21 @@
-import { getInput } from "@actions/core"
+import {getInput} from "@actions/core"
 
-type Actions = 'push' | 'release';
+type Actions = 'push' | 'release' | 'tag';
 
 export const authenticationScript = (username: string, password: string) =>
-  `echo ${password} | docker login --username=${username} registry.heroku.com --password-stdin`;
+    `echo ${password} | docker login --username=${username} registry.heroku.com --password-stdin`;
 
 export const herokuActionSetup = (appName: string) => {
-  return (action: Actions) => {
-    const HEROKU_API_KEY = getInput('api_key');
-    const contextPath = getInput('dockerfile_path');
-    const processType = getInput('process_type');
+    return (action: Actions) => {
+        const HEROKU_API_KEY = getInput('api_key');
+        const dockerImage = getInput('docker_image');
+        const processType = getInput('process_type');
+        if (action === "tag") {
+            return `docker tag ${dockerImage} registry.heroku.com/${appName}/${processType}`
+        } else if (action === "push") {
+            return `docker push registry.heroku.com/${appName}/${processType}`
+        }
 
-    return action === 'push'
-      ? `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} \
-	      ${processType} \
-          --recursive \
-          --context-path ${contextPath} \
-          --app ${appName}`
-      : `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} ${processType} --app ${appName}`;
-  }
+        return `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} ${processType} --app ${appName}`
+    }
 }
