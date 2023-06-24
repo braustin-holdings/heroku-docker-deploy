@@ -11,8 +11,8 @@ inputs:
   app_name:
     description: 'Your Heroku App Name'
     required: true
-  dockerfile_path:
-    description: 'Dockerfile path'
+  docker_image:
+    description: 'Unique image id for the image to be deployed.'
     required: true
   process_type:
     description: 'Heroku Process Type'
