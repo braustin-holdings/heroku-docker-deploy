@@ -13,6 +13,7 @@ export const herokuActionSetup = (appName: string) => {
 
     return action === 'push'
       ? `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} \
+	 ${processType}     
           --recursive \
           --context-path ${contextPath} \
           --app ${appName}`

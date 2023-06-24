@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "A simple action to deploy container to Heroku Container Registry",
   "main": "index.js",
-  "scripts": {},
+  "scripts": { "force_build": "npx @vercel/ncc build index.ts && git add ."},
   "husky": {
     "hooks": {
       "pre-commit": "npx @vercel/ncc build index.ts && git add ."
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jctaveras/heroku-deploy.git"
+    "url": "git+https://github.com/braustin-holdings/heroku-docker-deploy.git"
   },
   "keywords": [
     "github",
