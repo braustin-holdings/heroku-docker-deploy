@@ -15,6 +15,7 @@ herokuLogin()
        info(`stdout: ${stdout}`);
      })
   .then(async () => {
+      info('Pushing your image to Heroku Container Registry.');
     const { stdout } = await promisify(exec)(herokuAction('push'));
 
     info('Your Docker image was pushed to Heroku Container Registry. 🏗');

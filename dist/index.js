@@ -2734,6 +2734,7 @@ const herokuAction = (0, scripts_1.herokuActionSetup)((0, core_1.getInput)('app_
     (0, core_1.info)(`stdout: ${stdout}`);
 }))
     .then(() => __awaiter(void 0, void 0, void 0, function* () {
+    (0, core_1.info)('Pushing your image to Heroku Container Registry.');
     const { stdout } = yield (0, util_1.promisify)(child_process_1.exec)(herokuAction('push'));
     (0, core_1.info)('Your Docker image was pushed to Heroku Container Registry. 🏗');
     (0, core_1.info)(`stdout: ${stdout}`);
