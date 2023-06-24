@@ -2797,7 +2797,7 @@ const herokuActionSetup = (appName) => {
         const processType = (0, core_1.getInput)('process_type');
         return action === 'push'
             ? `HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:${action} \
-	 ${processType}     
+	      ${processType} \
           --recursive \
           --context-path ${contextPath} \
           --app ${appName}`
